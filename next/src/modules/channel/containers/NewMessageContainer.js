@@ -32,7 +32,9 @@ const NewMessageContainer = ({ children, user, channel }) => (
       <Form
         children={ children }
         onSubmit={ ({ body }, { reset }) => {
-          reset()
+          setTimeout(() => {
+            reset()
+          }) // Error: Cannot reset() in onSubmit(), use setTimeout(form.reset)
 
           send({
             variables: {
