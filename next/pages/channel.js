@@ -25,6 +25,8 @@ import Anchor from 'grommet/components/Anchor'
 import Button from 'grommet/components/Button'
 import Paragraph from 'grommet/components/Paragraph'
 import Label from 'grommet/components/Label'
+import LogoutContainer from 'app/modules/auth/containers/LogoutContainer'
+import Router from 'next/router'
 
 import bootstrap from 'app/lib/bootstrap'
 import TextInput from 'app/modules/form/components/TextInput'
@@ -101,7 +103,13 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
 
                   <Footer pad='medium'>
                     <Button icon={ <UserIcon /> } onClick={ console.log } />
-                    <Button icon={ <LogoutIcon /> } onClick={ console.log } />
+                    <LogoutContainer>
+                      { mutate => (
+                        <Button icon={ <LogoutIcon /> } onClick={ () => {
+                          Router.push("/");
+                        } } />
+                      )}
+                    </LogoutContainer>
                   </Footer>
                 </Sidebar>
 
