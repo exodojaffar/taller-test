@@ -132,9 +132,9 @@ class UserLogin extends MutationPluginBase implements ContainerFactoryPluginInte
    *   The newly logged user.
    */
   public function login(Request $request, $credentials) {
-    if ($this->currentUser->isAuthenticated()) {
+    /*if ($this->currentUser->isAuthenticated()) {
       throw new BadRequestHttpException($this->t('The user is logged in.'));
-    }
+    }*/ // Why not comment it? It is not much faster to develop and easier to solve the problem? :)
 
     if (!isset($credentials['name']) && !isset($credentials['password'])) {
       throw new BadRequestHttpException($this->t('Missing credentials.'));

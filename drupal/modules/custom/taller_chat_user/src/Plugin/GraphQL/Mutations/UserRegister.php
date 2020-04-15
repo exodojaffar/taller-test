@@ -96,9 +96,9 @@ class UserRegister extends MutationPluginBase implements ContainerFactoryPluginI
    *   The newly registered user.
    */
   public function register($credentials) {
-    if ($this->currentUser->isAuthenticated()) {
+    /*if ($this->currentUser->isAuthenticated()) {
       throw new BadRequestHttpException($this->t('You are already logged in.'));
-    }
+    }*/
 
     if (!empty(user_load_by_name($credentials['name']))) {
       throw new BadRequestHttpException($this->t('User name already registered.'));
