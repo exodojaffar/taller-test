@@ -39,6 +39,14 @@ const StyledMessage = styled(Paragraph)`
   margin: 0;
 `
 
+const StyledChatBoxMessage = styled(Paragraph)`
+  height: 57vh;
+  overflow: auto;
+  flex: auto;
+  margin: 0;
+  min-width: 100%;
+`
+
 const StyledAuthor = styled(Label)`
   margin: 0;
 `
@@ -128,16 +136,18 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
                         </StyledRoomHeader>
 
                         <Box pad='medium' flex='grow'>
-                          { loading ? 'Loading...' : (
-                            messages.length === 0 ? 'No one talking here yet :(' : (
-                              messages.map(({ id, author, message }) => (
-                                <Box key={ id } pad='small' credit={ author }>
-                                  <StyledAuthor>{ author }</StyledAuthor>
-                                  <StyledMessage>{ message }</StyledMessage>
-                                </Box>
-                              ))
-                            )
-                          ) }
+                          <StyledChatBoxMessage>
+                            { loading ? 'Loading...' : (
+                              messages.length === 0 ? 'No one talking here yet :(' : (
+                                messages.map(({ id, author, message }) => (
+                                  <Box key={ id } pad='small' credit={ author }>
+                                    <StyledAuthor>{ author }</StyledAuthor>
+                                    <StyledMessage>{ message }</StyledMessage>
+                                  </Box>
+                                ))
+                              )
+                            ) }
+                          </StyledChatBoxMessage>
                         </Box>
 
                         <Box pad='medium' direction='column'>
