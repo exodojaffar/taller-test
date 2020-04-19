@@ -36,7 +36,8 @@ const StyledRoomHeader = styled(Header)`
 `
 
 const StyledMessage = styled(Paragraph)`
-  margin: 0;
+  margin: 0 0 0 15px;
+  color: black;
 `
 
 const StyledChatBoxMessage = styled(Paragraph)`
@@ -148,19 +149,27 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
                             { '#' + channel }
                           </Title>
 
-                          <Button icon={ <RefreshIcon /> } onClick={ () => refetch() } />
+                          <Button icon={ <RefreshIcon /> } onClick={ () => {
+                            document.querySelector("#channel-chat-box").scrollTo(0, document.querySelector("#channel-chat-box").scrollHeight);
+                            refetch()
+                          } } />
                         </StyledRoomHeader>
 
                         <Box pad='medium' flex='grow'>
-                          <StyledChatBoxMessage>
+                          <StyledChatBoxMessage id='channel-chat-box'>
                             { loading ? 'Loading...' : (
                               messages.length === 0 ? 'No one talking here yet :(' : (
-                                messages.map(({ id, author, message, created }) =>  (
-                                  <Box key={ id } pad='small' credit={ author }>
-                                    <StyledAuthor><StyledMessageDate>[{formatDate(created)}]</StyledMessageDate> { author }: </StyledAuthor>
-                                    <StyledMessage>{ message }</StyledMessage>
-                                  </Box>
-                                ) )
+                                messages.map(({ id, author, message, created }) => {
+                                  setTimeout(() => {
+                                    document.querySelector("#channel-chat-box").scrollTo(0, document.querySelector("#channel-chat-box").scrollHeight);
+                                  })
+                                  return (
+                                    <Box key={ id } pad='small' credit={ author }>
+                                      <StyledAuthor><StyledMessageDate>[{formatDate(created)}]</StyledMessageDate> { author }: </StyledAuthor>
+                                      <StyledMessage>{ message }</StyledMessage>
+                                    </Box>
+                                  )
+                                } )
                               )
                             ) }
                           </StyledChatBoxMessage>
