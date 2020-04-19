@@ -49,6 +49,11 @@ const StyledChatBoxMessage = styled(Paragraph)`
 
 const StyledAuthor = styled(Label)`
   margin: 0;
+  font-weight: bold;
+`
+
+const StyledMessageDate = styled(Label)`
+  font-size: 0.75em;
 `
 
 const StyledTextInput = styled(TextInput)`
@@ -139,12 +144,22 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
                           <StyledChatBoxMessage>
                             { loading ? 'Loading...' : (
                               messages.length === 0 ? 'No one talking here yet :(' : (
-                                messages.map(({ id, author, message }) => (
-                                  <Box key={ id } pad='small' credit={ author }>
-                                    <StyledAuthor>{ author }</StyledAuthor>
-                                    <StyledMessage>{ message }</StyledMessage>
-                                  </Box>
-                                ))
+                                messages.map(({ id, author, message, created }) => {
+                                  let date = new Date(created * 1000);
+                                  let formatted =
+                                    date.getFullYear() + "-" +
+                                    (date.getMonth() + 1).toString().padStart(2, '0') + "-" +
+                                    date.getDate().toString().padStart(2, '0') + " " +
+                                    date.getHours().toString().padStart(2, '0') + ":" +
+                                    date.getMinutes().toString().padStart(2, '0') + ":" +
+                                    date.getSeconds().toString().padStart(2, '0');
+                                  return (
+                                    <Box key={ id } pad='small' credit={ author }>
+                                      <StyledAuthor><StyledMessageDate>[{formatted}]</StyledMessageDate> { author }: </StyledAuthor>
+                                      <StyledMessage>{ message }</StyledMessage>
+                                    </Box>
+                                  )
+                                })
                               )
                             ) }
                           </StyledChatBoxMessage>
