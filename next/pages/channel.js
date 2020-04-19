@@ -36,11 +36,25 @@ const StyledRoomHeader = styled(Header)`
 `
 
 const StyledMessage = styled(Paragraph)`
+  margin: 0 0 0 15px;
+  color: black;
+`
+
+const StyledChatBoxMessage = styled(Paragraph)`
+  height: 57vh;
+  overflow: auto;
+  flex: auto;
   margin: 0;
+  min-width: 100%;
 `
 
 const StyledAuthor = styled(Label)`
   margin: 0;
+  font-weight: bold;
+`
+
+const StyledMessageDate = styled(Label)`
+  font-size: 0.75em;
 `
 
 const StyledTextInput = styled(TextInput)`
@@ -50,6 +64,17 @@ const StyledTextInput = styled(TextInput)`
 const AddChannelButton = styled(Button)`
   margin-left: auto;
 `
+
+const formatDate = (int) => {
+  let date = new Date(int * 1000);
+  let frmt = date.getFullYear() + "-" +
+    (date.getMonth() + 1).toString().padStart(2, '0') + "-" +
+    date.getDate().toString().padStart(2, '0') + " " +
+    date.getHours().toString().padStart(2, '0') + ":" +
+    date.getMinutes().toString().padStart(2, '0') + ":" +
+    date.getSeconds().toString().padStart(2, '0');
+  return frmt;
+}
 
 const LoadingComponent = () => (
   <Box full='vertical' justify='center' align='center'>
@@ -124,20 +149,30 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
                             { '#' + channel }
                           </Title>
 
-                          <Button icon={ <RefreshIcon /> } onClick={ () => refetch() } />
+                          <Button icon={ <RefreshIcon /> } onClick={ () => {
+                            document.querySelector("#channel-chat-box").scrollTo(0, document.querySelector("#channel-chat-box").scrollHeight);
+                            refetch()
+                          } } />
                         </StyledRoomHeader>
 
                         <Box pad='medium' flex='grow'>
-                          { loading ? 'Loading...' : (
-                            messages.length === 0 ? 'No one talking here yet :(' : (
-                              messages.map(({ id, author, message }) => (
-                                <Box key={ id } pad='small' credit={ author }>
-                                  <StyledAuthor>{ author }</StyledAuthor>
-                                  <StyledMessage>{ message }</StyledMessage>
-                                </Box>
-                              ))
-                            )
-                          ) }
+                          <StyledChatBoxMessage id='channel-chat-box'>
+                            { loading ? 'Loading...' : (
+                              messages.length === 0 ? 'No one talking here yet :(' : (
+                                messages.map(({ id, author, message, created }) => {
+                                  setTimeout(() => {
+                                    document.querySelector("#channel-chat-box").scrollTo(0, document.querySelector("#channel-chat-box").scrollHeight);
+                                  })
+                                  return (
+                                    <Box key={ id } pad='small' credit={ author }>
+                                      <StyledAuthor><StyledMessageDate>[{formatDate(created)}]</StyledMessageDate> { author }: </StyledAuthor>
+                                      <StyledMessage>{ message }</StyledMessage>
+                                    </Box>
+                                  )
+                                } )
+                              )
+                            ) }
+                          </StyledChatBoxMessage>
                         </Box>
 
                         <Box pad='medium' direction='column'>

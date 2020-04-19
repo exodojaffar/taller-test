@@ -24,6 +24,7 @@ const query = gql`
       count
       entities {
         id
+        created
         author: entityOwner {
           name
         }
