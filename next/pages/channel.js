@@ -64,6 +64,17 @@ const AddChannelButton = styled(Button)`
   margin-left: auto;
 `
 
+const formatDate = (int) => {
+  let date = new Date(int * 1000);
+  let frmt = date.getFullYear() + "-" +
+    (date.getMonth() + 1).toString().padStart(2, '0') + "-" +
+    date.getDate().toString().padStart(2, '0') + " " +
+    date.getHours().toString().padStart(2, '0') + ":" +
+    date.getMinutes().toString().padStart(2, '0') + ":" +
+    date.getSeconds().toString().padStart(2, '0');
+  return frmt;
+}
+
 const LoadingComponent = () => (
   <Box full='vertical' justify='center' align='center'>
     <HashLoader color='#e02438' loading />
@@ -144,22 +155,12 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
                           <StyledChatBoxMessage>
                             { loading ? 'Loading...' : (
                               messages.length === 0 ? 'No one talking here yet :(' : (
-                                messages.map(({ id, author, message, created }) => {
-                                  let date = new Date(created * 1000);
-                                  let formatted =
-                                    date.getFullYear() + "-" +
-                                    (date.getMonth() + 1).toString().padStart(2, '0') + "-" +
-                                    date.getDate().toString().padStart(2, '0') + " " +
-                                    date.getHours().toString().padStart(2, '0') + ":" +
-                                    date.getMinutes().toString().padStart(2, '0') + ":" +
-                                    date.getSeconds().toString().padStart(2, '0');
-                                  return (
-                                    <Box key={ id } pad='small' credit={ author }>
-                                      <StyledAuthor><StyledMessageDate>[{formatted}]</StyledMessageDate> { author }: </StyledAuthor>
-                                      <StyledMessage>{ message }</StyledMessage>
-                                    </Box>
-                                  )
-                                })
+                                messages.map(({ id, author, message, created }) =>  (
+                                  <Box key={ id } pad='small' credit={ author }>
+                                    <StyledAuthor><StyledMessageDate>[{formatDate(created)}]</StyledMessageDate> { author }: </StyledAuthor>
+                                    <StyledMessage>{ message }</StyledMessage>
+                                  </Box>
+                                ) )
                               )
                             ) }
                           </StyledChatBoxMessage>
