@@ -13,7 +13,6 @@ import ChatIcon from 'grommet/components/icons/base/Chat'
 import RefreshIcon from 'grommet/components/icons/base/Refresh'
 import AddCircleIcon from 'grommet/components/icons/base/Add'
 import UserIcon from 'grommet/components/icons/base/User'
-import LogoutIcon from 'grommet/components/icons/base/Logout'
 import Split from 'grommet/components/Split'
 import Sidebar from 'grommet/components/Sidebar'
 import Header from 'grommet/components/Header'
@@ -117,7 +116,9 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
                   <Box flex='grow' justify='start'>
                     <Menu primary>
                       { channels.map(({ name }) => (
-                        <Link key={ name } prefetch href={ `/messages/${name}` }>
+                          <Link key={ name } prefetch href={ {
+                            query: { channel: name }
+                          } }>
                           <Anchor className={ channel === name ? 'active' : '' }>
                             # <b>{ name }</b>
                           </Anchor>
@@ -128,13 +129,7 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
 
                   <Footer pad='medium'>
                     <Button icon={ <UserIcon /> } onClick={ console.log } />
-                    <LogoutContainer>
-                      { mutate => (
-                        <Button icon={ <LogoutIcon /> } onClick={ () => {
-                          Router.push("/");
-                        } } />
-                      )}
-                    </LogoutContainer>
+                    <LogoutContainer/>
                   </Footer>
                 </Sidebar>
 
@@ -184,7 +179,7 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
                               { ({ handleSubmit }) => (
                                 <form onSubmit={ handleSubmit }>
                                   <NewMessageContainer.Message
-                                    placeHolder='Message #general'
+                                    placeHolder={ `Message #${channel}` }
                                     component={ StyledTextInput }
                                   />
                                 </form>
