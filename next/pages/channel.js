@@ -144,7 +144,7 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
                             { '#' + channel }
                           </Title>
 
-                          <Button icon={ <RefreshIcon /> } onClick={ () => {
+                          <Button title="Force refresh" icon={ <RefreshIcon /> } onClick={ () => {
                             document.querySelector("#channel-chat-box").scrollTo(0, document.querySelector("#channel-chat-box").scrollHeight);
                             refetch()
                           } } />
