@@ -55,7 +55,10 @@ const normalize = pipe(
 
 const MessagesContainer = ({ children, channel }) => (
   channel && channel.tid ? (
-    <Query query={ query } variables={ { channel: channel.tid } }>
+    // https://www.apollographql.com/docs/react/data/queries/#polling
+    // An websocket or SSE would be better, but pooling it is much faster to develop :D
+    // Not recommended for large scale usage
+    <Query pollInterval={ 1000 } query={ query } variables={ { channel: channel.tid } }>
       { pipe(normalize, children) }
     </Query>
   ) : (
