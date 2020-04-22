@@ -81,6 +81,12 @@ const LoadingComponent = () => (
   </Box>
 )
 
+const scrollChatBottom = () => {
+  setTimeout(() => {
+    document.querySelector("#channel-chat-box").scrollTo(0, document.querySelector("#channel-chat-box").scrollHeight);
+  })
+}
+
 import CurrentUserContainer from 'app/modules/auth/containers/CurrentUserContainer'
 import ChannelsContainer from 'app/modules/channel/containers/ChannelsContainer'
 import MessagesContainer from 'app/modules/channel/containers/MessagesContainer'
@@ -145,7 +151,7 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
                           </Title>
 
                           <Button title="Force refresh" icon={ <RefreshIcon /> } onClick={ () => {
-                            document.querySelector("#channel-chat-box").scrollTo(0, document.querySelector("#channel-chat-box").scrollHeight);
+                            scrollChatBottom()
                             refetch()
                           } } />
                         </StyledRoomHeader>
@@ -155,9 +161,7 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
                             { loading ? 'Loading...' : (
                               messages.length === 0 ? 'No one talking here yet :(' : (
                                 messages.map(({ id, author, message, created }) => {
-                                  setTimeout(() => {
-                                    document.querySelector("#channel-chat-box").scrollTo(0, document.querySelector("#channel-chat-box").scrollHeight);
-                                  })
+                                  scrollChatBottom()
                                   return (
                                     <Box key={ id } pad='small' credit={ author }>
                                       <StyledAuthor><StyledMessageDate>[{formatDate(created)}]</StyledMessageDate> { author }: </StyledAuthor>
