@@ -27,7 +27,9 @@ const NewMessageContainer = ({ children, channels }) => (
       children(name => {
         if (name) {
           let exists = channels.find(i => i.name === name);
-          if (exists) {
+          if (name.match(/[^a-z_\d]/g)) {
+            alert('Only lowercase letter, numbers or underscores!');
+          } else if (exists) {
             alert(`Channel '${name}' already exists! :(`);
           } else {
             mutate({ variables: { name }});
