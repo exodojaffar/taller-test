@@ -47,6 +47,12 @@ export const minLength = min => value => {
   }
 }
 
+export const validChars = value => {
+  if (value.match(/[^a-z_\d]/g)) {
+    return 'Only lowercase letter, numbers or underscore'
+  }
+}
+
 /*
  * Combine multiple validation rules into one..
  */
