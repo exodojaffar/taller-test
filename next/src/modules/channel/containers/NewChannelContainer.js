@@ -21,12 +21,17 @@ const mutation = gql`
 
 // @TODO: implement optimistic query on channels?
 
-const NewMessageContainer = ({ children }) => (
+const NewMessageContainer = ({ children, channels }) => (
   <Mutation mutation={ mutation } refetchQueries={ ['Channels'] }>
     { mutate => (
       children(name => {
         if (name) {
-          mutate({ variables: { name } })
+          let exists = channels.find(i => i.name === name);
+          if (exists) {
+            alert(`Channel '${name}' already exists! :(`);
+          } else {
+            mutate({ variables: { name }});
+          }
         }
       })
     ) }
@@ -34,6 +39,7 @@ const NewMessageContainer = ({ children }) => (
 )
 
 NewMessageContainer.propTypes = {
+  channels: [],
   children: func,
 }
 
