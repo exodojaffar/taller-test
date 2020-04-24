@@ -26,6 +26,8 @@ import Label from 'grommet/components/Label'
 import LogoutContainer from 'app/modules/auth/containers/LogoutContainer'
 import Router from 'next/router'
 
+import ReactGravatar from 'react-gravatar'
+
 import bootstrap from 'app/lib/bootstrap'
 import TextInput from 'app/modules/form/components/TextInput'
 
@@ -61,6 +63,17 @@ const StyledTextInput = styled(TextInput)`
 
 const AddChannelButton = styled(Button)`
   margin-left: auto;
+`
+
+const AvatarBox = styled(Button)`
+  opacity: 1;
+  .react-gravatar{
+    border-radius: 100%;
+    margin-right: 5px;
+    height: 45px;
+    width: 45px;
+    border: 2px solid rgba(0, 0, 150, 0.4);
+  }
 `
 
 const formatDate = (int) => {
@@ -147,7 +160,9 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
                     </Box>
 
                     <Footer pad='medium'>
-                      <Button icon={ <UserIcon /> } onClick={ console.log } />
+                      <AvatarBox>
+                        <ReactGravatar email={ user.mail } />
+                      </AvatarBox>
                       <LogoutContainer/>
                     </Footer>
                   </Sidebar>
@@ -156,7 +171,7 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
                     <LoadingComponent />
                   ) : (
                     <MessagesContainer channel={ channels.find(({ name }) => name === channel) }>
-                      { ({ loading, refetch, messages }) => (
+                      { ({ loading, messages }) => (
                         <Box full='vertical'>
                           <StyledRoomHeader pad={ { vertical: 'small', horizontal: 'medium' } } justify='between'>
                             <Title>
@@ -167,17 +182,21 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
                           <Box pad='medium' flex='grow'>
                             <StyledChatBoxMessage id='channel-chat-box'>
                               { loading ? 'Loading...' : (
-                                messages.length === 0 ? 'No one talking here yet :(' : (
-                                  messages.map(({ id, author, message, created }) => {
-                                    scrollChatBottom()
-                                    return (
-                                      <Box key={ id } pad='small' credit={ author }>
-                                        <StyledAuthor><StyledMessageDate>[{formatDate(created)}]</StyledMessageDate> { author }: </StyledAuthor>
-                                        <StyledMessage>{ message }</StyledMessage>
-                                      </Box>
-                                    )
-                                  } )
-                                )
+                                messages.map(({ author, message, created }) => {
+                                  scrollChatBottom()
+                                  return (
+                                    <Box pad='small' credit={ author.name }>
+                                      <StyledAuthor>
+                                        <AvatarBox>
+                                          <ReactGravatar email={ author.mail || author.name + "Taller" } />
+                                        </AvatarBox>
+                                        <StyledMessageDate>[{formatDate(created)}] </StyledMessageDate>
+                                        <span> { author.name }:</span>
+                                      </StyledAuthor>
+                                      <StyledMessage>{ message }</StyledMessage>
+                                    </Box>
+                                  )
+                                })
                               ) }
                             </StyledChatBoxMessage>
                           </Box>
