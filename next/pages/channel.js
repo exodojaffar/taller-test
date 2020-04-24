@@ -1,7 +1,6 @@
 /**
  * This is the page rendered when inside a chat room.
  */
-
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
@@ -11,7 +10,6 @@ import { HashLoader } from 'react-spinners'
 import App from 'grommet/components/App'
 import ChatIcon from 'grommet/components/icons/base/Chat'
 import AddCircleIcon from 'grommet/components/icons/base/Add'
-import UserIcon from 'grommet/components/icons/base/User'
 import Split from 'grommet/components/Split'
 import Sidebar from 'grommet/components/Sidebar'
 import Header from 'grommet/components/Header'
@@ -25,6 +23,8 @@ import Paragraph from 'grommet/components/Paragraph'
 import Label from 'grommet/components/Label'
 import LogoutContainer from 'app/modules/auth/containers/LogoutContainer'
 import Router from 'next/router'
+
+import { Offline } from 'react-detect-offline'
 
 import ReactGravatar from 'react-gravatar'
 
@@ -76,6 +76,19 @@ const AvatarBox = styled(Button)`
   }
 `
 
+const ConnectionBox = styled(Button)`
+  background: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  color: white;
+  opacity: 1;
+  font-weight: bold;
+`
+
 const formatDate = (int) => {
   let date = new Date(int * 1000);
   let frmt = date.getFullYear() + "-" +
@@ -105,8 +118,9 @@ import MessagesContainer from 'app/modules/channel/containers/MessagesContainer'
 import NewMessageContainer from 'app/modules/channel/containers/NewMessageContainer'
 import NewChannelContainer from 'app/modules/channel/containers/NewChannelContainer'
 
-const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
-  <CurrentUserContainer>
+const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => {
+
+  return (<CurrentUserContainer>
     { ({ user }) => (() => {
       if (!user || !user.uid) {
         return (
@@ -126,6 +140,9 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
           { ({ loading, channels }) => (
             (loading && !channels.length) ? <LoadingComponent /> : (
               <App centered={ false }>
+                <Offline>
+                  <ConnectionBox>Connection lost!</ConnectionBox>
+                </Offline>
                 <Split fixed flex='right'>
                   <Sidebar colorIndex='neutral-1'>
                     <Header pad='medium'>
@@ -233,7 +250,7 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
       ) }
     )() }
   </CurrentUserContainer>
-)
+)}
 
 ChatRoom.propTypes = {
   url: PropTypes.object.isRequired,
