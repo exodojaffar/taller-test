@@ -10,7 +10,7 @@
 
 ## Considerations
 - It's the first time I've worked with Drupal;
-- It's the first time I've worked with GraphQl;
+- It's the first time I've worked with GraphQL;
 - It's the second time I've worked with React (The first time [was here](https://github.com/w-lopes/aula-react/)).
 
 :)
