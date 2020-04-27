@@ -165,7 +165,8 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => {
                     <Box flex='grow' justify='start'>
                       <Menu primary>
                         { channels.map(({ name }) => (
-                            <Link key={ name } prefetch href={ {
+                            <Link key={ name } prefetch as={`/messages/${name}`} href={ {
+                              pathname: '/channel',
                               query: { channel: name }
                             } }>
                             <Anchor className={ channel === name ? 'active' : '' }>
@@ -199,21 +200,23 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => {
                           <Box pad='medium' flex='grow'>
                             <StyledChatBoxMessage id='channel-chat-box'>
                               { loading ? 'Loading...' : (
-                                messages.map(({ author, message, created }) => {
-                                  scrollChatBottom()
-                                  return (
-                                    <Box pad='small' credit={ author.name }>
-                                      <StyledAuthor>
-                                        <AvatarBox>
-                                          <ReactGravatar email={ author.mail || author.name + "Taller" } />
-                                        </AvatarBox>
-                                        <StyledMessageDate>[{formatDate(created)}] </StyledMessageDate>
-                                        <span> { author.name }:</span>
-                                      </StyledAuthor>
-                                      <StyledMessage>{ message }</StyledMessage>
-                                    </Box>
-                                  )
-                                })
+                                messages.length === 0 ? 'No one talking here yet :(' : (
+                                  messages.map(({ author, message, created }) => {
+                                    scrollChatBottom()
+                                    return (
+                                      <Box pad='small' credit={ author.name }>
+                                        <StyledAuthor>
+                                          <AvatarBox>
+                                            <ReactGravatar email={ author.mail || author.name + "Taller" } />
+                                          </AvatarBox>
+                                          <StyledMessageDate>[{formatDate(created)}] </StyledMessageDate>
+                                          <span> { author.name }:</span>
+                                        </StyledAuthor>
+                                        <StyledMessage>{ message }</StyledMessage>
+                                      </Box>
+                                    )
+                                  })
+                                )
                               ) }
                             </StyledChatBoxMessage>
                           </Box>
