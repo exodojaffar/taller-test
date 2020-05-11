@@ -108,7 +108,8 @@ const LoadingComponent = () => (
 
 const scrollChatBottom = () => {
   setTimeout(() => {
-    document.querySelector("#channel-chat-box").scrollTo(0, document.querySelector("#channel-chat-box").scrollHeight);
+    let chat_box = document.querySelector("#channel-chat-box");
+    chat_box.scrollTo(0, document.querySelector("#channel-chat-box").scrollHeight);
   })
 }
 
@@ -189,21 +190,20 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => {
                     <LoadingComponent />
                   ) : (
                     <MessagesContainer channel={ channels.find(({ name }) => name === channel) }>
-                      { ({ loading, messages }) => (
-                        <Box full='vertical'>
-                          <StyledRoomHeader pad={ { vertical: 'small', horizontal: 'medium' } } justify='between'>
-                            <Title>
-                              { '#' + channel }
-                            </Title>
-                          </StyledRoomHeader>
+                      { ({ loading, messages }) => {
+                        let msg_cont = (
+                          <Box full='vertical'>
+                            <StyledRoomHeader pad={ { vertical: 'small', horizontal: 'medium' } } justify='between'>
+                              <Title>
+                                { '#' + channel }
+                              </Title>
+                            </StyledRoomHeader>
 
-                          <Box pad='medium' flex='grow'>
-                            <StyledChatBoxMessage id='channel-chat-box'>
-                              { loading ? 'Loading...' : (
-                                messages.length === 0 ? 'No one talking here yet :(' : (
-                                  messages.map(({ author, message, created }) => {
-                                    scrollChatBottom()
-                                    return (
+                            <Box pad='medium' flex='grow'>
+                              <StyledChatBoxMessage id='channel-chat-box'>
+                                { loading ? 'Loading...' : (
+                                  messages.length === 0 ? 'No one talking here yet :(' : (
+                                    messages.map(({ author, message, created }) => (
                                       <Box pad='small' credit={ author.name }>
                                         <StyledAuthor>
                                           <AvatarBox>
@@ -214,34 +214,36 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => {
                                         </StyledAuthor>
                                         <StyledMessage>{ message }</StyledMessage>
                                       </Box>
-                                    )
-                                  })
-                                )
-                              ) }
-                            </StyledChatBoxMessage>
-                          </Box>
-
-                          <Box pad='medium' direction='column'>
-                            { user && user.uid ? (
-                              <NewMessageContainer
-                                user={ user }
-                                channel={ channels.find(({ name }) => name === channel) }
-                              >
-                                { ({ handleSubmit }) => (
-                                  <form onSubmit={ handleSubmit }>
-                                    <NewMessageContainer.Message
-                                      placeHolder={ `Message #${channel}` }
-                                      component={ StyledTextInput }
-                                    />
-                                  </form>
+                                    ))
+                                  )
                                 ) }
-                              </NewMessageContainer>
-                            ) : (
-                              'Log in to post messages'
-                            ) }
+                              </StyledChatBoxMessage>
+                            </Box>
+
+                            <Box pad='medium' direction='column'>
+                              { user && user.uid ? (
+                                <NewMessageContainer
+                                  user={ user }
+                                  channel={ channels.find(({ name }) => name === channel) }
+                                >
+                                  { ({ handleSubmit }) => (
+                                    <form onSubmit={ handleSubmit }>
+                                      <NewMessageContainer.Message
+                                        placeHolder={ `Message #${channel}` }
+                                        component={ StyledTextInput }
+                                      />
+                                    </form>
+                                  ) }
+                                </NewMessageContainer>
+                              ) : (
+                                'Log in to post messages'
+                              ) }
+                            </Box>
                           </Box>
-                        </Box>
-                      ) }
+                        )
+                        scrollChatBottom();
+                        return msg_cont;
+                      } }
                     </MessagesContainer>
                   ) }
 
